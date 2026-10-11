@@ -165,7 +165,7 @@ RETURN
 
 - **Market Leader:** **Brazil** dominates regional economic output with **$9.476bn** in Nominal GDP.
 - **Total Regional Volume:** Cumulative LATAM GDP across the period reached **$27.82T**.
-- **Smallest Output:** **Belize** represents the smallest nominal economic volume at **$14bn**.
+- **Smallest Output:** **Belize** represents the smallest nominal economic volume at **$13.56bn**.
 
 ---
 

@@ -22,7 +22,7 @@ Clients, offices, staff, memberships, products, services and payments need one c
 
 ![Entity relationship diagram](./evidences/ERD.png)
 
-1. **Model** — entities with primary and foreign keys, a location hierarchy (city → province → country → continent) and lookup tables for payment type, service and staff role.
+1. **Model** — 22 tables and 25 foreign keys in SQL Server: clients, staff and positions, offices, services and products, payments in several currencies, workout routines, and a location hierarchy (continent → country → province → city) built with bridge tables. The diagram is generated directly from the creation script.
 2. **Query** — a CTE joins service payments with service type, office, client and payment type into one clean dataset.
 3. **Aggregate** — revenue (`SUM`) and number of payments (`COUNT`) by service type, ordered by revenue.
 

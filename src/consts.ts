@@ -1,5 +1,10 @@
-// Place any global data in this file.
-// You can import this data from anywhere in your site by using the `import` keyword.
+// Site-wide data, imported by layouts and pages.
 
-export const SITE_TITLE = 'ACAnalytics';
-export const SITE_DESCRIPTION = 'Collection of data analysis projects where I apply Python, SQL, visualization, and analytical thinking to solve problems and support business decisions';
+export const SITE_TITLE = 'Alberto Castro · Data Analyst';
+export const SITE_DESCRIPTION =
+	'Portfolio of Alberto Castro, Data Analyst. Data projects in SQL, Python and Power BI that turn raw data into business decisions.';
+
+export const EMAIL = 'ajcastro9726@gmail.com';
+export const LINKEDIN_URL =
+	'https://www.linkedin.com/in/alberto-jos%C3%A9-castro-jim%C3%A9nez-80718013a/';
+export const CV_FILE = 'DataAnalyst-AlbertoCastro.pdf';

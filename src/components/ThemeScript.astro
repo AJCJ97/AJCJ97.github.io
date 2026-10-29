@@ -1,29 +1,17 @@
 ---
-// src/components/ThemeScript.astro
+// Runs before the page paints so there is no flash of the wrong theme.
+// Order: saved choice → system preference → dark.
 ---
 
 <script is:inline>
-  // Script para cargar la preferencia de color desde localStorage
-  const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  
-  // 1. Obtener la preferencia del usuario o del sistema
-  const savedTheme = localStorage.getItem('theme');
-  let currentTheme = 'light';
-
-  if (savedTheme) {
-    currentTheme = savedTheme;
-  } else if (prefersDarkScheme) {
-    currentTheme = 'dark';
-  }
-
-  // 2. Aplicar la clase 'dark-mode' al <body> si es necesario
-  if (currentTheme === 'dark') {
-    document.documentElement.classList.add('dark-mode');
-  }
-
-  // 3. Función para cambiar y guardar la preferencia
-  window.toggleDarkMode = () => {
-    const isDark = document.documentElement.classList.toggle('dark-mode');
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-  };
+	(() => {
+		let theme;
+		try {
+			theme = localStorage.getItem('theme');
+		} catch {}
+		if (theme !== 'light' && theme !== 'dark') {
+			theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+		}
+		document.documentElement.dataset.theme = theme;
+	})();
 </script>

@@ -1,162 +1,66 @@
 ---
-import { SITE_TITLE } from '../consts';
-import HeaderLink from './HeaderLink.astro';
-import logo from '../assets/logo.png';
-const base = import.meta.env.BASE_URL;
+import { CV_FILE } from '../consts';
 
+const base = import.meta.env.BASE_URL;
+const path = Astro.url.pathname;
+const isCerts = path.startsWith(`${base}certifications`);
+const isProjects = path.startsWith(`${base}projects`);
 ---
 
-<header>
-	<nav>
-		<HeaderLink translate="no" href="/" class="site-title-link"><img class="logo-img" src={logo.src} alt=""/></HeaderLink>
-		
-		<div class="social-links">
-			<HeaderLink href="/">Home</HeaderLink>
-			<HeaderLink href={`/projects/`}>Projects</HeaderLink>
-			<HeaderLink href={`/#about`}>About</HeaderLink>
-			<HeaderLink href={`/#contact`}>Contact</HeaderLink>
-		</div>
-		
-		<button id="menuToggle" class="menu-btn">☰</button>
-	</nav>
+<header class="site-header">
+	<nav class="container nav" aria-label="Main">
+		<a href={base} class="brand" translate="no">Alberto Castro</a>
 
-	<div id="mobileMenu" class="mobile-menu" style="display:none;">
-		<HeaderLink href="/">Home</HeaderLink>
-		<HeaderLink href={`/projects/`}>Projects</HeaderLink>
-		<HeaderLink href="/#about">About</HeaderLink>
-		<HeaderLink href="/#contact">Contact</HeaderLink>
-	</div>
+		<div class="nav-links" id="navLinks">
+			<a href={`${base}projects/`} aria-current={isProjects ? 'page' : undefined}>Work</a>
+			<a href={`${base}#about`}>About</a>
+			<a href={`${base}certifications/`} aria-current={isCerts ? 'page' : undefined}>Certifications</a>
+			<a href={`${base}#contact`}>Contact</a>
+			<a href={`${base}${CV_FILE}`} class="cv-link" download>Download CV</a>
+		</div>
+
+		<div class="nav-actions">
+			<button type="button" class="icon-btn theme-toggle" id="themeToggle" aria-label="Switch color theme">
+				<svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+					<circle cx="12" cy="12" r="4"></circle>
+					<path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+				</svg>
+				<svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+					<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+				</svg>
+			</button>
+			<button type="button" class="icon-btn menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+					<path d="M4 7h16M4 12h16M4 17h16"></path>
+				</svg>
+			</button>
+		</div>
+	</nav>
 </header>
 
 <script>
-const btn = document.getElementById("menuToggle");
-const menu = document.getElementById("mobileMenu");
+	const themeToggle = document.getElementById('themeToggle');
+	themeToggle?.addEventListener('click', () => {
+		const root = document.documentElement;
+		const next = root.dataset.theme === 'light' ? 'dark' : 'light';
+		root.dataset.theme = next;
+		try {
+			localStorage.setItem('theme', next);
+		} catch {}
+	});
 
-btn.addEventListener("click", () => {
-    // Alterna entre 'none' (oculto) y 'flex' (visible)
-    menu.style.display = menu.style.display === "none" || menu.style.display === "" ? "flex" : "none";
-});
+	const menuToggle = document.getElementById('menuToggle');
+	const navLinks = document.getElementById('navLinks');
+	menuToggle?.addEventListener('click', () => {
+		const open = navLinks?.classList.toggle('open') ?? false;
+		menuToggle.setAttribute('aria-expanded', String(open));
+		menuToggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+	});
+	// Close the mobile menu after jumping to a section
+	navLinks?.addEventListener('click', (event) => {
+		if ((event.target as HTMLElement).closest('a')) {
+			navLinks.classList.remove('open');
+			menuToggle?.setAttribute('aria-expanded', 'false');
+		}
+	});
 </script>
-
-<style>
-	.logo-img {
-        height: 80px; 
-        width: auto;
-        display: block; 
-    }
-	header {
-	  	position: sticky;
-		top: 0;
-		z-index: 1000;
-		margin: 0;
-		padding: 0 1em;
-		background: var(--color-block-bg);
-		box-shadow: 0 2px 8px rgba(var(--black), 5%);
-	}
-	h2 {
-		margin: 0;
-		font-size: 1em;
-	}
-
-	h2 a,
-	h2 a.active {
-		text-decoration: none;
-		font-weight: bold;
-	}
-	nav {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
-	
-	/* ESTILOS DE ESCRITORIO POR DEFECTO */
-	.social-links,
-	.social-links a {
-		display: flex; /* Tabs visibles en escritorio */
-	}
-
-	.menu-btn {
-		display: none; /* Botón oculto en escritorio */
-	}
-	
-	.mobile-menu {
-		flex-direction: column;
-		width: 100%;
-		background: var(--color-block-bg);
-		z-index: 10;
-		padding: 1em 0;
-		border-top: 1px solid rgba(var(--black), 0.1);
-	}
-	.mobile-menu a {
-		padding: 0.5em 1em;
-		text-decoration: none;
-		font-weight: bold;
-		color: var(--black);
-	}
-	
-
-	/* Estilos generales de enlaces */
-	nav a {
-		padding-left: 0.5em;
-		color: var(--black);
-		border-bottom: 4px solid transparent;
-		text-decoration: none !important;
-		font-weight: bold;
-	}
-	nav a.active {
-		border-bottom-color: var(--accent) !important;
-		font-weight: bold;
-	}
-	.site-title-link {
-		border-bottom: 0 !important;
-	}
-	
-	@media (max-width: 720px) {
-		.logo-img {
-        display: block !important; /* Forzar que se muestre, anulando cualquier posible display: none */
-        width:auto;
-		height: 40px; /* Reducir un poco el tamaño para móvil si es necesario */
-    }
-		/* 1. VISIBILIDAD */
-		.social-links {
-			display: none; /* Oculta los tabs de escritorio en móvil */
-		}
-		.menu-btn {
-			display: block; /* Muestra el botón de menú en móvil */
-			font-size: 1.5em;
-			background: none;
-			border: none;
-			cursor: pointer;
-			color: var(--black);
-		}
-		
-		/* 2. AJUSTES DE DISEÑO PARA MÓVIL */
-		header {
-			padding: 0;
-			box-shadow: none;
-		}
-
-		nav {
-			width: 95%;
-			align-items: center; /* Alinea los elementos verticalmente */
-		}
-		
-		h2 {
-			margin-right: 0.5em;
-			font-size: 1em; /* Ajustamos el tamaño del título */
-		}
-		
-		/* Puedes simplificar o eliminar las siguientes reglas si ya no son necesarias */
-		nav a {
-			padding: 1em 0.3em;
-			border-bottom-width: 2px;
-			font-size: 0.9em;
-			justify-content: center;
-			line-height: 2em;
-			vertical-align: middle;
-		}
-		a:-webkit-any-link {
-		text-decoration: none !important;
-		}
-	}
-</style>

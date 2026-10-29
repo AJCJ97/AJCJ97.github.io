@@ -1,7 +1,13 @@
 ---
 title: Gym Admin BI Report
-description: Revenue Analysis & Business Insights using Power BI
+description: Revenue-focused Power BI report built on SQL Server data, with data cleaning, modeling and DAX measures to support business decisions.
 pubDate: 2026-01-19
+category: Business Intelligence
+tags: [Power BI, Power Query, DAX, SQL]
+cover: ./evidences/ProductSales.png
+coverAlt: Power BI report showing product sales by office
+featured: true
+order: 2
 ---
 
 ### 📊 Gym Admin BI Project – Revenue Analysis & Insights

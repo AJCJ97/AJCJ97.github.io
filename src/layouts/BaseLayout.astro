@@ -1,97 +1,71 @@
 ---
-import "../styles/global.css";
+import '../styles/global.css';
 import ThemeScript from '../components/ThemeScript.astro';
-import { SITE_TITLE } from '../consts';
-import type { ImageMetadata } from 'astro';
-import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 interface Props {
-  title: string;
-  description: string;
-  image?: ImageMetadata | string;
+	title?: string;
+	description?: string;
 }
 
-const { title, description ,image = "https://ajcj97.github.io/acanalytics/logo.png" } = Astro.props;
+const { title, description = SITE_DESCRIPTION } = Astro.props;
+const pageTitle = title ? `${title} · Alberto Castro` : SITE_TITLE;
 
-// Dominio de GitHub Pages
-const site = "https://ajcj97.github.io/acanalytics";
-
-const canonicalURL = new URL(Astro.url.pathname, site);
+const base = import.meta.env.BASE_URL;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(`${base}og-image.png`, Astro.site);
 ---
 
-<!DOCTYPE html>
-<html class="dark"> 
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <link rel="canonical" href={canonicalURL} />
-    <!-- Open Graph -->
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content={canonicalURL.href} />
-    <meta property="og:image" content={image} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={image} />
-    <!-- Assets con BASE -->
-    <link rel="icon" href="/acanalytics/favicon.ico" />
-    <link
-      rel="alternate"
-      type="application/rss+xml"
-      title={SITE_TITLE}
-      href={new URL('rss.xml', site)}
-    />
-    <meta name="generator" content={Astro.generator} />
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>{pageTitle}</title>
+		<meta name="description" content={description} />
+		<link rel="canonical" href={canonicalURL} />
+		<link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+		<link rel="alternate" type="application/rss+xml" title={SITE_TITLE} href={`${base}rss.xml`} />
 
+		<meta property="og:title" content={pageTitle} />
+		<meta property="og:description" content={description} />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={canonicalURL} />
+		<meta property="og:image" content={ogImage} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={pageTitle} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImage} />
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>AC.Analytics | Data Analyst Portfolio</title>
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  </head>
-  <body>
-    
-    <Header />
-    <main>
-      <slot />
-    </main>
-    <Footer/>
-    <button id="backToTop" aria-label="Back to top">
-      ↑
-    </button>
-    <ThemeScript /> 
+		<meta name="theme-color" content="#0e1116" />
+		<meta name="generator" content={Astro.generator} />
 
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap"
+			rel="stylesheet"
+		/>
+		<ThemeScript />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<slot />
+		</main>
+		<Footer />
+		<button id="backToTop" type="button" aria-label="Back to top">↑</button>
 
-
-    <script>
-  const btn = document.getElementById("backToTop");
-
-  window.addEventListener("scroll", () => {
-    if (window.scrollY > 100) {
-      btn.classList.add("show");
-    } else {
-      btn.classList.remove("show");
-    }
-  });
-
-  btn.addEventListener("click", () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  });
-</script>
-  </body>
+		<script>
+			const backToTop = document.getElementById('backToTop');
+			window.addEventListener('scroll', () => {
+				backToTop?.classList.toggle('show', window.scrollY > 400);
+			});
+			backToTop?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+		</script>
+	</body>
 </html>
-

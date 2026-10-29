@@ -1,84 +1,122 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
-import AboutHeroImage from '../assets/about.jpg';
 import { Image } from 'astro:assets';
-const base = import.meta.env.BASE_URL;
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getProjects } from '../lib/projects';
+import { CV_FILE, EMAIL, LINKEDIN_URL } from '../consts';
+import portrait from '../assets/about.jpg';
 
+const base = import.meta.env.BASE_URL;
+const projects = await getProjects();
+const featured = projects.filter((p) => p.data.featured);
+const others = projects.filter((p) => !p.data.featured);
 ---
 
-<BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
-	<section class="hero">
-		<h1>
-			Hi, I'm Alberto
-		</h1>
-		<p class="justified-text">
-			I'm a Data Analyst with a Software Engineering background and 6+ years of experience working with 
-			cross-functional teams across the U.S. and the U.K. I specialize in SQL, Python, Power BI, and Excel, 
-			transforming raw information into insights that support business decisions.
-		</p>
-		<div class="cta-buttons">
-			<a href="#projects" class="primary-btn">Projects</a>
-			<a href="#about" class="primary-btn">About Me</a>
-			<a href="/acanalytics/certifications/" class="primary-btn">My Certifications</a>
-			<a href="#contact" class="primary-btn">Contact Me</a>
-			<a href="DataAnalyst-AlbertoCastro.pdf" download="DataAnalyst-AlbertoCastro.pdf" class="secondary-btn">Download CV</a>
-
+<BaseLayout>
+	<section class="container hero">
+		<div class="hero-copy">
+			<p class="kicker">Data Analyst</p>
+			<h1 class="hero-title">I turn raw data into <em>decisions</em> teams can act on.</h1>
+			<p class="lede">
+				I’m Alberto Castro, a Data Analyst with a Software Engineering background and 6+ years working with
+				cross-functional teams across the U.S. and the U.K.
+			</p>
+			<div class="btn-row">
+				<a href="#work" class="btn btn-primary">See selected work</a>
+				<a href={`${base}${CV_FILE}`} class="btn" download>Download CV</a>
+			</div>
+		</div>
+		<div class="hero-photo">
+			<Image src={portrait} alt="Portrait of Alberto Castro" width={720} loading="eager" />
 		</div>
 	</section>
 
-	<section id="projects" class="projects-section">
-		<h2>Featured Projects</h2>
+	<section class="container" aria-label="Highlights">
+		<dl class="highlights">
+			<div><dt>6+ years</dt><dd>with cross-functional teams</dd></div>
+			<div><dt>U.S. &amp; U.K.</dt><dd>teams and stakeholders</dd></div>
+			<div><dt>B.Sc.</dt><dd>Software Engineering, UTN</dd></div>
+			<div><dt>PL-300</dt><dd>Power BI certification in progress</dd></div>
+		</dl>
+	</section>
 
-		<div class="project-grid">
-			<div class="project-card">
-				<h3>LATAM GDP Performance & Economic Pipeline</h3>
-				<p>End-to-End Automated Data Pipeline and Executive BI Dashboard for Latin American GDP Analysis (2020–2024)</p>
-				<p>Technologies:<br><br> Python (Pandas), SQL Server(Views,T-SQL), Power BI & DAX</p>
-				<a href="/acanalytics/projects/global-bank-latam-growth-e2e/" target="_blank">View Project →</a>
+	<section id="work" class="container section">
+		<div class="section-head">
+			<h2>Selected work</h2>
+			<a href={`${base}projects/`} class="text-link">All projects →</a>
+		</div>
+
+		{featured.map((project) => <ProjectCard project={project} index={projects.indexOf(project)} variant="feature" />)}
+
+		{
+			others.length > 0 && (
+				<div class="card-grid">
+					{others.map((project) => (
+						<ProjectCard project={project} index={projects.indexOf(project)} />
+					))}
+				</div>
+			)
+		}
+	</section>
+
+	<section id="about" class="band">
+		<div class="container about">
+			<div class="about-intro">
+				<p class="kicker">About</p>
+				<h2>From CRM development to data analysis.</h2>
 			</div>
-
-			<div class="project-card">
-				<h3>Gym Admin Database BI Report</h3>
-				<p>Business Intelligence report built using data extracted from SQL Server and transformed within Power BI. Includes data cleaning, modeling, DAX measures, and revenue-focused dashboards to support business decision-making.</p>
-				<p>Technologies:<br><br> Power BI (Power Query, DAX, Data Modeling), SQL</p>
-				<a href="/acanalytics/projects/gym-admin-report/" target="_blank">View Project →</a>
-			</div>
-
-			<div class="only-text-link">
-				<a href="/acanalytics/projects/">See all</a>
+			<div class="about-body">
+				<p>
+					My career began in CRM and email development, where I worked daily with PMs, designers and engineering
+					teams to solve technical problems and deliver data-driven components used by thousands of users.
+				</p>
+				<p>
+					Moving into data was a natural evolution. Today I work on projects focused on data cleaning, modeling
+					and visualization, turning raw information into something clear, usable and valuable.
+				</p>
+				<h3 class="toolkit-title">Toolkit</h3>
+				<dl class="toolkit">
+					<div><dt>SQL</dt><dd>T-SQL, views, CTEs, data modeling</dd></div>
+					<div><dt>Power BI</dt><dd>Power Query, DAX, dashboards</dd></div>
+					<div><dt>Python</dt><dd>Pandas, NumPy, ETL automation</dd></div>
+					<div><dt>Excel</dt><dd>Analysis and reporting</dd></div>
+				</dl>
 			</div>
 		</div>
 	</section>
 
-	<section id="about" class="projects-section">
-		<h2>About Me</h2>
-
-		<div class="hero-image-container">
-			<Image alt="" width={300} height={300} loading="eager" src={AboutHeroImage} />
+	<section id="certs" class="container section">
+		<div class="section-head">
+			<h2>Certifications</h2>
+			<a href={`${base}certifications/`} class="text-link">All certifications →</a>
 		</div>
-		<p class="justified-text">
-			My career began in CRM and email development, where I worked daily with PMs, designers, and engineering teams to solve technical problems, structure projects, and deliver high-impact, data-driven components used by thousands of users.
-			This experience strengthened my analytical thinking, attention to detail, problem-solving mindset, and my ability to work in global, fast-paced environments. <br><br>
-			Transitioning into data has been a natural evolution for me. Today, I work with SQL, Python, Power BI, Excel and build projects focused on data cleaning, visualization, and insights. I enjoy transforming raw information into something clear, usable, and valuable.
-			I'm motivated by learning, building, and contributing to teams that rely on data to drive decisions.<br><br>
-			If you're looking for someone analytical, curious, structured, and committed—I'd love to connect.
-		</p>
+		<ul class="cert-summary">
+			<li>
+				<h3>Power BI &amp; Data Analysis</h3>
+				<p>Microsoft Learn · 3 learning paths completed, PL-300 exam pending</p>
+			</li>
+			<li>
+				<h3>Azure Data &amp; Cloud</h3>
+				<p>Microsoft via Coursera · Azure SQL, Cosmos DB, Data Warehouse</p>
+			</li>
+			<li>
+				<h3>Generative AI</h3>
+				<p>Coursera · 4 courses, incl. AI-Powered Software and System Design</p>
+			</li>
+			<li>
+				<h3>Data, Python &amp; R</h3>
+				<p>Storytelling With Data, Introduction to Python, R for Data Science</p>
+			</li>
+		</ul>
 	</section>
 
-	<section id="contact" class="projects-section">
-		<h2>Let's talk</h2>
-
-		<div class="contact-me-links">
-			<a href="mailto:ajcastro9726@gmail.com" class="primary-btn">
-				<i class="fa-solid fa-envelope"></i> 
-				Email
-			</a>
-			<a href="https://www.linkedin.com/in/alberto-jos%C3%A9-castro-jim%C3%A9nez-80718013a/" class="primary-btn">
-				<i class="fab fa-linkedin"></i> 
-				LinkedIn
-			</a>
+	<section id="contact" class="container contact">
+		<p class="kicker">Contact</p>
+		<h2 class="contact-title">Let’s work <em>together</em>.</h2>
+		<p class="lede">If you’re looking for someone analytical, curious and structured, I’d love to connect.</p>
+		<div class="btn-row">
+			<a href={`mailto:${EMAIL}`} class="btn btn-primary">{EMAIL}</a>
+			<a href={LINKEDIN_URL} class="btn" target="_blank" rel="noopener noreferrer">LinkedIn</a>
 		</div>
 	</section>
 </BaseLayout>
-

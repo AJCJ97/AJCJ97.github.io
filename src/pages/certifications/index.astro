@@ -1,120 +1,110 @@
 ---
-import BackToHome from "../../components/BackToHome.astro";
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import { SITE_DESCRIPTION, SITE_TITLE } from "../../consts";
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const transcript =
+	'https://learn.microsoft.com/en-us/users/albertocastrojimenez-0038/transcript?tab=tab-learning-paths';
+
+type Row = { name: string; detail?: string; link?: string; linkLabel?: string };
+type Group = { title: string; note?: string; columns: [string, string]; rows: Row[] };
+
+const groups: Group[] = [
+	{
+		title: 'Microsoft Learn — Power BI & Data Analysis',
+		note: 'Completed learning paths (100%). PL-300 exam pending.',
+		columns: ['learning path', 'proof'],
+		rows: [
+			{ name: 'Get Started with Microsoft Data Analytics', link: transcript, linkLabel: 'transcript' },
+			{ name: 'Prepare Data for Analysis with Power BI', link: transcript, linkLabel: 'transcript' },
+			{ name: 'Prepare and Visualize Data with Microsoft Power BI', link: transcript, linkLabel: 'transcript' },
+		],
+	},
+	{
+		title: 'Microsoft & Azure — Data & Cloud',
+		note: 'Issued by Microsoft, delivered through Coursera.',
+		columns: ['course', 'proof'],
+		rows: [
+			{ name: 'Explore Core Data Concepts in Microsoft Azure', link: 'https://www.coursera.org/account/accomplishments/verify/GZEYNTWE4PAH', linkLabel: 'verify' },
+			{ name: 'Microsoft Azure SQL', link: 'https://www.coursera.org/account/accomplishments/verify/A3PYQEFN6SHS', linkLabel: 'verify' },
+			{ name: 'Microsoft Azure Cosmos DB', link: 'https://www.coursera.org/account/accomplishments/verify/YXTKT3G62MAB', linkLabel: 'verify' },
+			{ name: 'Modern Data Warehouse Analytics in Microsoft Azure', link: 'https://www.coursera.org/account/accomplishments/verify/EHF9LS4C57HL', linkLabel: 'verify' },
+		],
+	},
+	{
+		title: 'Generative AI',
+		columns: ['course', 'proof'],
+		rows: [
+			{ name: 'AI-Powered Software and System Design', link: 'https://www.coursera.org/account/accomplishments/certificate/H13DV2S7C683', linkLabel: 'verify' },
+			{ name: 'Generative AI for Everyone', link: 'https://www.coursera.org/account/accomplishments/certificate/1JGUH1RK9QCJ', linkLabel: 'verify' },
+			{ name: 'Gen AI Training Path — Foundational Track', link: 'https://www.coursera.org//account/accomplishments/badge/jEnXgYCxTdeJ14GAsd3Xzg', linkLabel: 'verify' },
+			{ name: 'Gen AI Training Path — Technical Track', link: 'https://www.coursera.org//account/accomplishments/badge/sDqpF-8iSya6qRfvItsmiw', linkLabel: 'verify' },
+		],
+	},
+	{
+		title: 'Data Analytics, Python & Visualization',
+		columns: ['course', 'credential'],
+		rows: [
+			{ name: 'Storytelling With Data' },
+			{ name: 'Introduction to Python', detail: 'Cert. #45404627' },
+			{ name: 'R: Data Science and Data Analysis' },
+		],
+	},
+	{
+		title: 'Academic Background',
+		columns: ['degree', 'institution'],
+		rows: [
+			{ name: 'Bachelor’s Degree in Software Engineering', detail: 'UTN' },
+			{ name: 'Diploma in Information Technologies', detail: 'UTN' },
+			{ name: 'High School Diploma', detail: 'MEP — CTP Regional San Carlos' },
+			{ name: 'Technical Degree — IT Support', detail: 'MEP — CTP Regional San Carlos' },
+		],
+	},
+];
 ---
 
-<BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
-  <div class="certifications-page">
-    <BackToHome />
-    
-    <section class="certifications-content">
-      <h2>📜 Certifications & Learning</h2>
+<BaseLayout title="Certifications" description="Certifications and academic background of Alberto Castro, Data Analyst.">
+	<section class="container section">
+		<div class="page-intro">
+			<p class="kicker">Learning</p>
+			<h1>Certifications &amp; education</h1>
+			<p class="lede">
+				Every certification below is publicly verifiable. Microsoft Learn progress is available in my
+				<a href={transcript} target="_blank" rel="noopener noreferrer">public transcript</a>.
+			</p>
+		</div>
 
-      <p>
-        All certifications listed below are publicly verifiable.
-        Microsoft Learn progress is available through my
-        <a href="https://learn.microsoft.com/en-us/users/albertocastrojimenez-0038/transcript?tab=tab-learning-paths"
-           target="_blank" rel="noopener noreferrer">
-          public transcript
-        </a>.
-      </p>
-
-      <hr />
-
-      <h2>🟦 Microsoft Learn — Power BI & Data Analysis</h2>
-      <p class="subtitle"><em>Completed learning paths (100%). PL-300 exam pending.</em></p>
-
-      <ul class="cert-list">
-        <li>
-          <span>Get Started with Microsoft Data Analytics</span>
-          <a href="https://learn.microsoft.com/en-us/users/albertocastrojimenez-0038/transcript?tab=tab-learning-paths" target="_blank" rel="noopener noreferrer">View Transcript</a>
-        </li>
-        <li>
-          <span>Prepare Data for Analysis with Power BI</span>
-          <a href="https://learn.microsoft.com/en-us/users/albertocastrojimenez-0038/transcript?tab=tab-learning-paths" target="_blank" rel="noopener noreferrer">View Transcript</a>
-        </li>
-        <li>
-          <span>Prepare and Visualize Data with Microsoft Power BI</span>
-          <a href="https://learn.microsoft.com/en-us/users/albertocastrojimenez-0038/transcript?tab=tab-learning-paths" target="_blank" rel="noopener noreferrer">View Transcript</a>
-        </li>
-      </ul>
-
-      <hr />
-
-      <h2>🟦 Microsoft & Azure — Data & Cloud </h2>
-      <p class="subtitle"><em>Issued by Microsoft, delivered through Coursera.</em></p>
-
-      <ul class="cert-list">
-        <li>
-          <span>Explore Core Data Concepts in Microsoft Azure</span>
-          <a href="https://www.coursera.org/account/accomplishments/verify/GZEYNTWE4PAH" target="_blank" rel="noopener noreferrer">Verify</a>
-        </li>
-        <li>
-          <span>Microsoft Azure SQL</span>
-          <a href="https://www.coursera.org/account/accomplishments/verify/A3PYQEFN6SHS" target="_blank" rel="noopener noreferrer">Verify</a>
-        </li>
-        <li>
-          <span>Microsoft Azure Cosmos DB</span>
-          <a href="https://www.coursera.org/account/accomplishments/verify/YXTKT3G62MAB" target="_blank" rel="noopener noreferrer">Verify</a>
-        </li>
-        <li>
-          <span>Modern Data Warehouse Analytics in Microsoft Azure</span>
-          <a href="https://www.coursera.org/account/accomplishments/verify/EHF9LS4C57HL" target="_blank" rel="noopener noreferrer">Verify</a>
-        </li>
-      </ul>
-
-      <hr />
-
-      <h2>🤖 Generative AI </h2>
-
-      <ul class="cert-list">
-        <li>
-          <span>AI-Powered Software and System Design</span>
-          <a href="https://www.coursera.org/account/accomplishments/certificate/H13DV2S7C683" target="_blank" rel="noopener noreferrer">Verify</a>
-        </li>
-        <li>
-          <span>Generative AI for Everyone</span>
-          <a href="https://www.coursera.org/account/accomplishments/certificate/1JGUH1RK9QCJ" target="_blank" rel="noopener noreferrer">Verify</a>
-        </li>
-        <li>
-          <span>Gen AI Training Path — Foundational Track</span>
-          <a href="https://www.coursera.org//account/accomplishments/badge/jEnXgYCxTdeJ14GAsd3Xzg" target="_blank" rel="noopener noreferrer">Verify</a>
-        </li>
-        <li>
-          <span>Gen AI Training Path — Technical Track</span>
-          <a href="https://www.coursera.org//account/accomplishments/badge/sDqpF-8iSya6qRfvItsmiw" target="_blank" rel="noopener noreferrer">Verify</a>
-        </li>
-      </ul>
-
-      <hr />
-
-      <h2>📊 Data Analytics, Python & Visualization</h2>
-
-      <ul class="cert-list">
-        <li>
-          <span>Storytelling With Data</span>
-        </li>
-        <li>
-          <span>Introduction to Python</span>
-          <span class="cert-id">Cert. #45404627</span>
-        </li>
-        <li>
-          <span>R: Data Science and Data Analysis</span>
-        </li>
-      </ul>
-
-      <hr />
-
-      <h2>🎓 Academic Background</h2>
-
-      <ul class="cert-list">
-        <li><span>Bachelor's Degree in Software Engineering</span> <span class="institution">UTN</span></li>
-        <li><span>Diploma in Information Technologies</span> <span class="institution">UTN</span></li>
-        <li><span>High School Diploma</span> <span class="institution">MEP — CTP Regional San Carlos</span></li>
-        <li><span>Technical Degree — IT Support</span> <span class="institution">MEP — CTP Regional San Carlos</span></li>
-      </ul>
-    </section>
-  </div>
+		{
+			groups.map((group) => (
+				<div class="cert-group">
+					<h2>{group.title}</h2>
+					{group.note && <p>{group.note}</p>}
+					<div class="table-wrap">
+						<table class="data-table">
+							<thead>
+								<tr>
+									<th scope="col">{group.columns[0]}</th>
+									<th scope="col">{group.columns[1]}</th>
+								</tr>
+							</thead>
+							<tbody>
+								{group.rows.map((row) => (
+									<tr>
+										<td>{row.name}</td>
+										<td>
+											{row.link ? (
+												<a href={row.link} target="_blank" rel="noopener noreferrer">
+													{row.linkLabel} ↗
+												</a>
+											) : (
+												(row.detail ?? '—')
+											)}
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			))
+		}
+	</section>
 </BaseLayout>
-

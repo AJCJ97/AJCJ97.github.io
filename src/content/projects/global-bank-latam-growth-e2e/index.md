@@ -1,7 +1,13 @@
 ---
 title: LATAM GDP Performance & Economic Pipeline
-description: End-to-End Automated Data Pipeline and Executive BI Dashboard for Latin American GDP Analysis (2020–2024)
+description: Automated ETL from the World Bank API into SQL Server, with an executive Power BI dashboard comparing GDP across 18 Latin American countries (2020–2024).
 pubDate: 2026-08-12
+category: Data Engineering & BI
+tags: [Python, SQL Server, Power BI, DAX]
+cover: ./evidences/nominal.png
+coverAlt: Power BI chart of nominal GDP by Latin American country, 2020–2024
+featured: true
+order: 1
 ---
 
 ### 🗄️ LATAM GDP Performance & Economic Pipeline

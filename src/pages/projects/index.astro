@@ -1,44 +1,20 @@
 ---
-import BackToHome from "../../components/BackToHome.astro";
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import { SITE_DESCRIPTION, SITE_TITLE } from "../../consts";
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { getProjects } from '../../lib/projects';
+
+const projects = await getProjects();
 ---
 
-<BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
-	<BackToHome/>
-	<section class="projects-section">
-		<h2>Featured Projects</h2>
-
-		<div class="project-grid">
-			<div class="project-card">
-				<h3>LATAM GDP Performance & Economic Pipeline</h3>
-				<p>End-to-End Automated Data Pipeline and Executive BI Dashboard for Latin American GDP Analysis (2020–2024)</p>
-				<p>Technologies:<br><br> Python (Pandas), SQL Server(Views,T-SQL), Power BI (DAX)</p>
-				<a href="/acanalytics/projects/global-bank-latam-growth-e2e/" target="_blank">View Project →</a>
-			</div>
-
-			<div class="project-card">
-				<h3>Gym Admin Database</h3>
-				<p>Relational SQL database designed for a multi-location gym management system. Includes normalized schema design, entity relationships, and analytical queries to support operational and business reporting.</p>
-				<p>Technologies:<br><br> SQL (DDL, DML, JOINs, CTEs, Aggregations)</p>
-				<a href="/acanalytics/projects/gym-admin/" target="_blank">View Project →</a>
-			</div>
-
-			<div class="project-card">
-				<h3>Gym Admin Database BI Report</h3>
-				<p>Business Intelligence report built using data extracted from SQL Server and transformed within Power BI. Includes data cleaning, modeling, DAX measures, and revenue-focused dashboards to support business decision-making.</p>
-				<p>Technologies:<br><br> Power BI (Power Query, DAX, Data Modeling), SQL</p>
-				<a href="/acanalytics/projects/gym-admin-report/" target="_blank">View Project →</a>
-			</div>
-
-			<div class="project-card">
-				<h3>Python Database Generator</h3>
-				<p>Automated synthetic data generator that creates realistic CSV files and populates relational databases for testing, analytics, and BI projects using randomized and reproducible datasets.</p>
-				<p>Technologies:<br><br> Python (Pandas, NumPy), Data Generation, ETL Automation</p>
-				<a href="/acanalytics/projects/database-generator/" target="_blank">View Project →</a>
-			</div>
-
+<BaseLayout title="Projects" description="Data analysis, BI and data engineering projects by Alberto Castro.">
+	<section class="container section">
+		<div class="page-intro">
+			<p class="kicker">Portfolio</p>
+			<h1>All projects</h1>
+			<p class="lede">Data analysis, business intelligence and data engineering work, from raw source to dashboard.</p>
+		</div>
+		<div class="card-grid">
+			{projects.map((project, index) => <ProjectCard project={project} index={index} />)}
 		</div>
 	</section>
 </BaseLayout>
-

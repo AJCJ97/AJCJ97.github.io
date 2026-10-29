@@ -1,7 +1,12 @@
 ---
 title: Python Database Generator
-description: Python tool for generating structured synthetic datasets in CSV or JSON format for analytics and BI workflows.
+description: Synthetic data generator that produces realistic CSV and JSON datasets for testing, analytics and BI work.
 pubDate: 2024-01-01
+category: Python
+tags: [Python, Pandas, NumPy]
+cover: ./evidences/csv-output.png
+coverAlt: Generated CSV output shown in a code editor
+order: 4
 ---
 
 ### 🧪 Random User Dataset Generator

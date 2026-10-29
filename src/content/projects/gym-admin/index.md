@@ -1,7 +1,12 @@
 ---
 title: Gym Admin Database
-description: Diseño y modelado...
+description: Normalized relational database for a multi-location gym, with analytical queries for operational and business reporting.
 pubDate: 2024-01-01
+category: SQL
+tags: [SQL, DDL, CTEs]
+cover: ./evidences/ERD.png
+coverAlt: Entity relationship diagram of the gym database
+order: 3
 ---
 
 ### 🗄️ Gym Relational Database Design

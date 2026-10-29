@@ -1,0 +1,51 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import { projectUrl } from '../lib/projects';
+
+interface Props {
+	project: CollectionEntry<'projects'>;
+	index: number;
+	/** "feature" = large alternating row, "card" = grid card */
+	variant?: 'feature' | 'card';
+}
+
+const { project, index, variant = 'card' } = Astro.props;
+const { title, description, category, tags, cover, coverAlt } = project.data;
+const number = String(index + 1).padStart(2, '0');
+const href = projectUrl(project.slug);
+---
+
+{
+	variant === 'feature' ? (
+		<article class="feature">
+			{cover && (
+				<a href={href} class="feature-media" tabindex="-1" aria-hidden="true">
+					<Image src={cover} alt="" width={1040} />
+				</a>
+			)}
+			<div class="feature-body">
+				<p class="kicker">{number} — {category}</p>
+				<h3>{title}</h3>
+				<p>{description}</p>
+				<ul class="tag-list" aria-label="Tools">
+					{tags.map((tag) => <li>{tag}</li>)}
+				</ul>
+				<a href={href} class="read-more">Read the case study →</a>
+			</div>
+		</article>
+	) : (
+		<article class="card">
+			{cover && <Image src={cover} alt={coverAlt ?? ''} width={760} />}
+			<div class="card-body">
+				<p class="kicker">{number} — {category}</p>
+				<h3>{title}</h3>
+				<p>{description}</p>
+				<ul class="tag-list" aria-label="Tools">
+					{tags.map((tag) => <li>{tag}</li>)}
+				</ul>
+				<a href={href} class="read-more">View project →</a>
+			</div>
+		</article>
+	)
+}

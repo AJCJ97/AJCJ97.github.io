@@ -1,184 +1,52 @@
 ---
 title: LATAM GDP Performance & Economic Pipeline
-description: Automated ETL from the World Bank API into SQL Server, with an executive Power BI dashboard comparing GDP across 18 Latin American countries (2020–2024).
+description: Python pipeline from the World Bank API into SQL Server and Power BI, comparing 18 Latin American economies by size and by growth (2020–2024).
 pubDate: 2026-08-12
-category: Data Engineering & BI
-tags: [Python, SQL Server, Power BI, DAX]
+category: Data pipeline & BI
+tags: [Python, REST API, SQL Server, Power BI, DAX]
 cover: ./evidences/nominal.png
-coverAlt: Power BI chart of nominal GDP by Latin American country, 2020–2024
+coverAlt: Power BI bar chart of cumulative nominal GDP by Latin American country, 2020–2024
+repo: https://gitlab.com/acastro97/automated-api-data-pipeline-business-intelligence-dashboard
 featured: true
 order: 1
 ---
 
-### 🗄️ LATAM GDP Performance & Economic Pipeline
+## Technical objective
 
-**Type:** Data Engineering & Business Intelligence (E2E)  
-**Role:** Data Analyst / BI Engineer  
-**Context:** Personal Portfolio Project – Automated Data Pipeline & Analytics  
+Build a re-runnable pipeline that pulls two World Bank indicators for 18 Latin American countries, loads them into SQL Server and serves a Power BI report through a single analytical view.
 
----
+## Case context
 
-#### 🧩 Problem Context
-Analyzing regional macroeconomic indicators often relies on static, disconnected spreadsheets that require manual updates. To evaluate the economic trajectory of Latin America over the 2020–2024 period, a centralized, automated pipeline was required to ingest raw World Bank data, model it cleanly in a relational database, and present actionable executive insights comparing economic volume against growth velocity.
+How do Latin American economies compare after 2020? Nominal GDP shows **scale**; real GDP growth shows **momentum**. Looking at both avoids ranking countries on size alone. Data: public World Bank figures, 2020–2024.
 
----
+## Solution
 
-#### 🎯 Objective
-Build and deploy an automated **End-to-End (E2E)** data pipeline that extracts GDP metrics via REST API using Python, transforms and stores them in SQL Server, and delivers an interactive Power BI executive report featuring dynamic DAX rankings, regional benchmarks, and semantic visual storytelling.
+![Pipeline architecture: World Bank API to Python, SQL Server and Power BI](./evidences/graph.png)
 
----
+1. **Extract** — Python (`requests`) calls the World Bank REST API for nominal GDP in current US$ (`NY.GDP.MKTP.CD`) and annual real GDP growth (`NY.GDP.MKTP.KD.ZG`), for 18 ISO3 country codes.
+2. **Transform** — pandas flattens the JSON response, keeps country, year and value, casts types and drops empty records.
+3. **Load** — SQLAlchemy + pyodbc write both datasets to SQL Server tables (full reload on each run).
+4. **Model** — the view `vw_fact_gdp_latam` exposes both indicators to Power BI as one analytical layer.
+5. **Measure** — DAX ranks countries with `RANKX` over `ALL(Country)`, so rankings stay correct when a visual is filtered, and builds formatted KPI cards for the leader, total and lowest values.
 
-#### 🛠️ Tools Used
-- **Python:** requests, pandas, pyodbc (REST API Data Ingestion & ETL)
-- **SQL Server:** T-SQL, Relational Data Modeling, Views (vw_fact_gdp_latam)
-- **Power BI :** DAX 
+```dax
+Ranking_Growth =
+RANKX ( ALL ( vw_fact_gdp_latam[Country] ), [Global_Growth_%], , DESC )
+```
 
----
+## Tools used
 
-#### 🗂️ Pipeline Architecture & Design
-- **Ingestion Layer (Python):** Automated extraction of GDP growth percentage (NY.GDP.MKTP.KD.ZG) and Nominal GDP from the World Bank REST API using 3-letter ISO country codes (BRA, MEX, CRI, NIC, BOL, URY, etc.).
-- **Storage & Transformation (SQL Server):** Centralized relational database staging fact data and delivering a clean analytical view (vw_fact_gdp_latam) to offload heavy calculations from the BI front-end.
-- **Semantic & Presentation Layer (Power BI):** Discoupled DAX measures computing real-time rankings, top/bottom performers, regional averages, and dynamic UI labels without visual filter distortion.
+Python (requests, pandas, SQLAlchemy, pyodbc) · SQL Server (T-SQL view) · Power BI (DAX)
 
----
+## Result
 
-#### 💡 Business Value
-- **Automated Workflow:** Eliminates manual CSV collection; pipeline can refresh automatically as new World Bank data is published.
-- **Dual Macroeconomic Perspective:** Contrasts total economic volume (Nominal GDP in USD) against growth momentum (% GDP Expansion).
-- **Reduced Cognitive Load:** Executive dashboards utilize semantic color coding (Green-Yellow-Red) and key KPI cards for rapid decision-making.
+Two dashboards built on the same model.
 
----
+![Treemap of GDP growth by country with ranking cards](./evidences/percentage.png)
 
-#### 🔗 Analytical Evidence
+- **Growth** (sum of the annual real growth rates, 2020–2024): Nicaragua ranks #1 at 19.78% and Bolivia #18 at 2.45%. The 18-country average is 12.28%.
 
-##### 🔹 Business Question
+![Bar chart of cumulative nominal GDP with KPI cards](./evidences/nominal.png)
 
-<br>
-
-##### Case #1
-
-<br>
-
-**Which Latin American economies led GDP percentage growth between 2020 and 2024, and how do they compare against the regional average?**
-
-<p>The objective of this analysis is to evaluate economic expansion velocity across 18 Latin American countries, identifying top performers, lagging economies, and regional benchmarks to understand post-2020 economic recovery dynamics.</p>
-
-##### 🔹 Analytical Approach
-
-<br>
-
-##### Case #1
-
-<br>
-
-<p>Data ingested via Python into SQL Server was exposed through the analytical view vw_fact_gdp_latam. In Power BI, DAX measures were constructed using RANKX combined with ALL and ALLSELECTED to compute accurate regional rankings without being distorted by local visual filters.</p>
-
-<pre class="code-block"><code class="language-sql">
--- SQL Server Analytical View Layer
-CREATE VIEW vw_fact_gdp_latam AS
-SELECT 
-    country_code AS ISO3,
-    country_name AS Country,
-    year_period AS [Year],
-    gdp_growth_pct AS [PIB_%_Growth],
-    nominal_gdp_usd AS [GDP_Amount]
-FROM fact_gdp_latin_america;
-</code></pre>
-
-<pre class="code-block"><code class="language-dax">
-// DAX: Regional Average Growth Rate (2020-2024)
-Global_Growth_Average = 
-CALCULATE(
-    AVERAGE(vw_fact_gdp_latam[PIB_%_Growth]),
-    vw_fact_gdp_latam[Year] >= 2020 && vw_fact_gdp_latam[Year] <= 2024
-)
-
-// DAX: Unfiltered Country Growth Ranking
-Ranking_Growth = 
-RANKX(
-    ALL(vw_fact_gdp_latam[Country]), 
-    [Global_Growth_%], 
-    , 
-    DESC
-)
-</code></pre>
-
-##### 🔹 Key Findings
-
-<br>
-
-##### Case #1
-
-<br>
-
-<p>The Treemap visualizes the 18 economies organized by area and colored via a semantic gradient (green for high expansion, yellow for average, red for lagging). The bottom cards highlight the regional extremities against the LATAM average (12.28%).</p>
-
-![LATAM Global Growth Treemap](../global-bank-latam-growth-e2e/evidences/percentage.png)
-
-##### 🔹 Conclusions
-
-- **Leader:** **Nicaragua** achieved the highest growth rate (**19.78%**), taking the **#1** ranking position.
-- **Regional Benchmark:** The global growth average across Latin America stands at **12.28%**.
-- **Lowest:** **Bolivia** recorded the lowest growth rate (**2.45%**), occupying ranking **#18**.
-
----
-
-##### 🔹 Business Question
-
-<br>
-
-##### Case #2
-
-<br>
-
-**How is Nominal GDP distributed across Latin America, and which countries represent the highest concentration of total economic volume?**
-
-<p>While percentage growth measures speed, Nominal GDP measures scale. This analysis determines total regional GDP volume ($ USD) and identifies the dominant market players in Latin America.</p>
-
-##### 🔹 Analytical Approach
-
-<br>
-
-##### Case #2
-
-<br>
-
-<p>Nominal GDP values were aggregated to calculate the total cumulative regional GDP ($27.82T). Custom DAX formatting measures were engineered using string concatenation, scale reduction (Trillions/Billions), and line breaks (UNICHAR(10)) to produce clean executive KPI cards.</p>
-
-<pre class="code-block"><code class="language-dax">
-// DAX: Lowest GDP Country Card Label with Scaling & Line Break
-Lowest_GDP_Country = 
-VAR COUNTRY_NAME = TOPN(1, VALUES(vw_fact_gdp_latam[Country]), [Total_GDP], ASC)
-VAR GDP = MINX(ALLSELECTED(vw_fact_gdp_latam[Country]), [Total_GDP])
-VAR GDP_Formatted = FORMAT(GDP / 1000000000, "$#,##0.00") & "B"
-RETURN
-    COUNTRY_NAME & UNICHAR(10) & GDP_Formatted
-</code></pre>
-
-##### 🔹 Key Findings
-
-<br>
-
-##### Case #2
-
-<br>
-
-<p>A sorted bar chart illustrates total GDP distribution alongside three centralized KPI cards displaying the market leader, total regional GDP, and smallest economy.</p>
-
-![LATAM Nominal GDP Distribution](../global-bank-latam-growth-e2e/evidences/nominal.png)
-
-##### 🔹 Conclusions
-
-- **Market Leader:** **Brazil** dominates regional economic output with **$9.476bn** in Nominal GDP.
-- **Total Regional Volume:** Cumulative LATAM GDP across the period reached **$27.82T**.
-- **Smallest Output:** **Belize** represents the smallest nominal economic volume at **$13.56bn**.
-
----
-
-#### 🔗 Project Resources
-
-- 📁 **Source Code & Scripts (GitLab):**  
-  https://gitlab.com/acastro97/automated-api-data-pipeline-business-intelligence-dashboard
-
-- 📊 **Architecture & Pipeline Diagram:**  
-![Architecture & Pipeline Diagram](../global-bank-latam-growth-e2e/evidences/graph.png)
+- **Scale** (cumulative nominal GDP, 2020–2024): the region totals $27.82T. Brazil ($9.48T) and Mexico ($7.53T) lead; Belize ($13.6B) is the smallest.
+- **Takeaway:** the fastest-growing economies (Nicaragua, Panama, Dominican Republic, Costa Rica) are among the smallest, so size and momentum rank countries very differently.

@@ -12,7 +12,7 @@ export async function GET(context) {
 			title: project.data.title,
 			description: project.data.description,
 			pubDate: project.data.pubDate,
-			// Relative to `site`, which already includes the /acanalytics/ base
+			// Relative to `site`
 			link: `projects/${project.slug}/`,
 		})),
 	});

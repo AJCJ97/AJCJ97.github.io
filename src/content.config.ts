@@ -16,6 +16,8 @@ const projects = defineCollection({
 			tags: z.array(z.string()).default([]),
 			cover: image().optional(),
 			coverAlt: z.string().optional(),
+			// Source code link shown on the project page
+			repo: z.string().url().optional(),
 			// Featured projects get the large alternating layout on the home page
 			featured: z.boolean().default(false),
 			order: z.number().default(99),

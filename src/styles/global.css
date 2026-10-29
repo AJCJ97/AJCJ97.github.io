@@ -724,11 +724,6 @@ h3 {
 	color: var(--soft);
 }
 
-/* The Markdown files repeat the title as their first heading; the page header already shows it */
-.prose > h3:first-child {
-	display: none;
-}
-
 .prose h2,
 .prose h3,
 .prose h4 {

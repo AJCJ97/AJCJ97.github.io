@@ -3,10 +3,11 @@ import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { getProjects } from '../lib/projects';
-import { CV_FILE, EMAIL, LINKEDIN_URL } from '../consts';
+import { CV_FILE, EMAIL, GITLAB_URL, LINKEDIN_URL } from '../consts';
 import portrait from '../assets/about.jpg';
 
 const base = import.meta.env.BASE_URL;
+const cvUrl = `${base}${CV_FILE}`;
 const projects = await getProjects();
 const featured = projects.filter((p) => p.data.featured);
 const others = projects.filter((p) => !p.data.featured);
@@ -15,15 +16,16 @@ const others = projects.filter((p) => !p.data.featured);
 <BaseLayout>
 	<section class="container hero">
 		<div class="hero-copy">
-			<p class="kicker">Data Analyst</p>
-			<h1 class="hero-title">I turn raw data into <em>decisions</em> teams can act on.</h1>
+			<p class="kicker">Data &amp; BI Analyst</p>
+			<h1 class="hero-title">From raw data to <em>reports</em> teams can act on.</h1>
 			<p class="lede">
-				I’m Alberto Castro, a Data Analyst with a Software Engineering background and 6+ years working with
-				cross-functional teams across the U.S. and the U.K.
+				I’m Alberto Castro, a software engineer moving into data analytics. For 6+ years I’ve built API-driven
+				data components for U.S. and U.K. clients. This portfolio shows end-to-end work in SQL, Python and
+				Power BI.
 			</p>
 			<div class="btn-row">
-				<a href="#work" class="btn btn-primary">See selected work</a>
-				<a href={`${base}${CV_FILE}`} class="btn" download>Download CV</a>
+				<a href="#work" class="btn btn-primary">See projects</a>
+				<a href={cvUrl} class="btn" target="_blank" rel="noopener">View CV</a>
 			</div>
 		</div>
 		<div class="hero-photo">
@@ -33,16 +35,16 @@ const others = projects.filter((p) => !p.data.featured);
 
 	<section class="container" aria-label="Highlights">
 		<dl class="highlights">
-			<div><dt>6+ years</dt><dd>with cross-functional teams</dd></div>
-			<div><dt>U.S. &amp; U.K.</dt><dd>teams and stakeholders</dd></div>
+			<div><dt>6+ years</dt><dd>software engineering for U.S. &amp; U.K. clients</dd></div>
+			<div><dt>ES · EN · PT</dt><dd>native · professional (B2) · fluent</dd></div>
+			<div><dt>Costa Rica</dt><dd>open to remote or hybrid roles (UTC−6)</dd></div>
 			<div><dt>B.Sc.</dt><dd>Software Engineering, UTN</dd></div>
-			<div><dt>PL-300</dt><dd>Power BI certification in progress</dd></div>
 		</dl>
 	</section>
 
 	<section id="work" class="container section">
 		<div class="section-head">
-			<h2>Selected work</h2>
+			<h2>Projects</h2>
 			<a href={`${base}projects/`} class="text-link">All projects →</a>
 		</div>
 
@@ -63,23 +65,26 @@ const others = projects.filter((p) => !p.data.featured);
 		<div class="container about">
 			<div class="about-intro">
 				<p class="kicker">About</p>
-				<h2>From CRM development to data analysis.</h2>
+				<h2>A software engineer who already works with data in production.</h2>
 			</div>
 			<div class="about-body">
 				<p>
-					My career began in CRM and email development, where I worked daily with PMs, designers and engineering
-					teams to solve technical problems and deliver data-driven components used by thousands of users.
+					I’ve been a developer at Encora (now Coforge) since 2020. Part of that work is building data providers
+					that pull, transform and validate data from external APIs. They act as production ETL steps that feed
+					personalized campaigns in Braze and Marketo for U.S. and U.K. clients. I also coordinate technical
+					deliveries and write documentation for international teams.
 				</p>
 				<p>
-					Moving into data was a natural evolution. Today I work on projects focused on data cleaning, modeling
-					and visualization, turning raw information into something clear, usable and valuable.
+					I’m now applying that background to analytics: SQL modeling, DAX and reports that answer a business
+					question. I’m looking for Data Analyst, BI Analyst or Reporting Analyst roles.
 				</p>
 				<h3 class="toolkit-title">Toolkit</h3>
 				<dl class="toolkit">
-					<div><dt>SQL</dt><dd>T-SQL, views, CTEs, data modeling</dd></div>
-					<div><dt>Power BI</dt><dd>Power Query, DAX, dashboards</dd></div>
-					<div><dt>Python</dt><dd>Pandas, NumPy, ETL automation</dd></div>
-					<div><dt>Excel</dt><dd>Analysis and reporting</dd></div>
+					<div><dt>SQL</dt><dd>SQL Server / T-SQL, PostgreSQL, MySQL · CTEs, window functions, views, data modeling</dd></div>
+					<div><dt>Power BI</dt><dd>DAX (CALCULATE, RANKX, time intelligence), Power Query, data modeling, Power BI Service</dd></div>
+					<div><dt>Python</dt><dd>pandas, NumPy, requests, pyodbc, Matplotlib</dd></div>
+					<div><dt>Data integration</dt><dd>REST APIs, data validation, Braze, Marketo</dd></div>
+					<div><dt>Workflow</dt><dd>Excel (advanced), Git, GitLab, GitHub, Jira</dd></div>
 				</dl>
 			</div>
 		</div>
@@ -93,19 +98,19 @@ const others = projects.filter((p) => !p.data.featured);
 		<ul class="cert-summary">
 			<li>
 				<h3>Power BI &amp; Data Analysis</h3>
-				<p>Microsoft Learn · 3 learning paths completed, PL-300 exam pending</p>
+				<p>Microsoft Learn · 3 learning paths, verifiable public transcript</p>
 			</li>
 			<li>
-				<h3>Azure Data &amp; Cloud</h3>
-				<p>Microsoft via Coursera · Azure SQL, Cosmos DB, Data Warehouse</p>
+				<h3>Azure Data</h3>
+				<p>Microsoft via Coursera · Azure SQL, Data Warehouse Analytics, Core Data Concepts, Cosmos DB</p>
+			</li>
+			<li>
+				<h3>Data storytelling &amp; BI</h3>
+				<p>Storytelling With Data (Udemy) · Power BI Business Intelligence (G-Talent)</p>
 			</li>
 			<li>
 				<h3>Generative AI</h3>
-				<p>Coursera · 4 courses, incl. AI-Powered Software and System Design</p>
-			</li>
-			<li>
-				<h3>Data, Python &amp; R</h3>
-				<p>Storytelling With Data, Introduction to Python, R for Data Science</p>
+				<p>Gen AI Training Path, Foundational &amp; Technical (Encora / Coursera)</p>
 			</li>
 		</ul>
 	</section>
@@ -113,10 +118,15 @@ const others = projects.filter((p) => !p.data.featured);
 	<section id="contact" class="container contact">
 		<p class="kicker">Contact</p>
 		<h2 class="contact-title">Let’s work <em>together</em>.</h2>
-		<p class="lede">If you’re looking for someone analytical, curious and structured, I’d love to connect.</p>
+		<p class="lede">
+			Open to remote Data, BI and Reporting Analyst roles. Based in Costa Rica (UTC−6), working in English,
+			Spanish and Portuguese.
+		</p>
 		<div class="btn-row">
 			<a href={`mailto:${EMAIL}`} class="btn btn-primary">{EMAIL}</a>
 			<a href={LINKEDIN_URL} class="btn" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+			<a href={GITLAB_URL} class="btn" target="_blank" rel="noopener noreferrer">GitLab</a>
+			<a href={cvUrl} class="btn" download>Download CV</a>
 		</div>
 	</section>
 </BaseLayout>
